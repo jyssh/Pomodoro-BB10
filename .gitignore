@@ -1,0 +1,14 @@
+arm/
+x86/
+.settings/
+*~
+config.pri
+.device
+assets/.assets.index
+.preview*
+.moc
+*.o
+*.a
+*.bar
+*.obj
+*.so
