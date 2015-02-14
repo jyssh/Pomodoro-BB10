@@ -26,6 +26,11 @@ Page {
                 value: 2
                 text: "2 minutes"
             }
+            
+            Option {
+                value: 7
+                text: "7 minutes"
+            }
 
             Option {
                 value: 25

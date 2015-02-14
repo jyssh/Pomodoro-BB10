@@ -73,7 +73,7 @@ private:
     QTime m_startTime;
     QTime m_endTime;
 
-    int mMinuteHandMovementAngle;
+    double mMinuteHandMovementAngle;
     int mDuration;
 };
 

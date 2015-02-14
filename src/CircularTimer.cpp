@@ -125,7 +125,12 @@ void CircularTimer::updateHands()
         m_digitalTime->setText(timeLeft.toString("mm.ss"));
 
         m_secondHandleContainer->setRotationZ(m_secondHandleContainer->rotationZ() + SECOND_HAND_MOVEMENT_ANGLE);
-        m_minuteHandleContainer->setRotationZ(elapsedTime.minute() * mMinuteHandMovementAngle + 270);
+
+        double minuteMovement = elapsedTime.minute() * mMinuteHandMovementAngle + 270;
+        if (minuteMovement > (360 + 270))
+            m_minuteHandleContainer->setRotationZ(360 + 270);
+        else
+            m_minuteHandleContainer->setRotationZ(minuteMovement);
     } else {
         timeout();
     }
@@ -160,7 +165,6 @@ void CircularTimer::stop()
 
 void CircularTimer::timeout()
 {
-    qDebug() << "Timeout!";
     m_updateTimer->stop();
     m_digitalTime->setText(m_endTime.toString("mm.ss"));
     emit timerCompleted();
@@ -171,7 +175,7 @@ void CircularTimer::onDurationChanged(int duration)
     m_startTime.setHMS(0, 0, 0);
     m_endTime.setHMS(0, duration, 0);
     m_digitalTime->setText(m_endTime.toString("mm.ss"));
-    mMinuteHandMovementAngle = 360 / duration;
+    mMinuteHandMovementAngle = 360 / (double) duration;
 }
 
 bool CircularTimer::isActive() const
