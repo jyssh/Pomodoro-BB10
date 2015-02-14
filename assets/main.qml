@@ -7,6 +7,7 @@ NavigationPane {
 
     property int pomodoroCountBeforeLongBreak: 0
     property int totalPomodoroCount: 0
+    property int totalWorkMinutes: 0
     property string currentTimerType: "PomodoroTimer"
 
     attachedObjects: [
@@ -39,7 +40,7 @@ NavigationPane {
 
                 Label {
                     id: timerTypeLabel
-                    text: "Pomodoro Session"
+                    text: "Work Time!"
                     textStyle {
                         fontSize: FontSize.XLarge
                     }
@@ -55,8 +56,8 @@ NavigationPane {
                 }
 
                 Label {
-                    id: totalPomodoroCount
-                    text: "Total Pomodoros for this session: 0"
+                    id: totalPomodoroCountLabel
+                    text: "You worked for 0 Pomodoros."
                     textStyle {
                         fontSize: FontSize.Large
                     }
@@ -65,8 +66,8 @@ NavigationPane {
                 }
 
                 Label {
-                    id: totalWorkHours
-                    text: "You worked 0 hours"
+                    id: totalWorkHoursLabel
+                    text: "That would be 0 hours 0 minutes."
                     textStyle {
                         fontSize: FontSize.Large
                     }
@@ -80,6 +81,7 @@ NavigationPane {
             ActionItem {
                 id: startAction
                 title: "Start"
+                imageSource: "asset:///images/start.png"
                 ActionBar.placement: ActionBarPlacement.OnBar
                 onTriggered: {
                     timer.start()
@@ -88,6 +90,7 @@ NavigationPane {
             ActionItem {
                 id: stopAction
                 title: "Stop"
+                imageSource: "asset:///images/stop.png"
                 ActionBar.placement: ActionBarPlacement.OnBar
                 enabled: false
                 onTriggered: {
@@ -116,20 +119,25 @@ NavigationPane {
 
             if(currentTimerType == "PomodoroTimer") {
                 pomodoroCountBeforeLongBreak += 1
+
                 totalPomodoroCount += 1
+                totalPomodoroCountLabel.text = "You worked for " + totalPomodoroCount + " Pomodoros."
+                
+                totalWorkMinutes += appSettings.pomodoroDuration
+                totalWorkHoursLabel.text = "That would be " + Math.floor(totalWorkMinutes/60) + " hours " + (totalWorkMinutes % 60) + " minutes."
 
                 if(pomodoroCountBeforeLongBreak >= appSettings.pomodorosBeforeLongBreak) {
-                    timerTypeLabel.text = "Long Break Time!"
+                    timerTypeLabel.text = "Take a Long Break!"
                     currentTimerType = "LongBreakTimer"
                     timer.duration = appSettings.longBreakDuration
                     pomodoroCountBeforeLongBreak = 0
                 } else {
-                    timerTypeLabel.text = "Short Break Time!"
+                    timerTypeLabel.text = "Take a Short Break!"
                     currentTimerType = "ShortBreakTimer"
                     timer.duration = appSettings.shortBreakDuration
                 }
             } else {
-                timerTypeLabel.text = "Pomodoro Time!"
+                timerTypeLabel.text = "Work Time!"
                 currentTimerType = "PomodoroTimer"
                 timer.duration = appSettings.pomodoroDuration
             }

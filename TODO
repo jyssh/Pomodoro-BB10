@@ -1,0 +1,34 @@
+- Add icons. Refer to the website stored in phone history.
+- Add notification sounds.
+- Provide an option to change the notification sounds.
+- Create a regularly updated active frame.
+
+- Set appropriate duration in timer when settings page is swiped out.
+x Set minute hand to reflect the set duration.
+
+- Several skins for the timer.
+    - Default: Circular
+    - Full Digital
+        - Change themes when tapping on time
+    - Sandglass?
+- Minimal colors and animations to conserve battery.
+
+- Share functionality. Figure out what things can be shared.
+- Prompt user to take long break after set number of Pomodoros.
+
+- Headless ?
+	- Doesn't make much sense to make this app headless.
+
+- Active Frame
+    - See if an active frame can be updated regularly. If so, then update time every 30 seconds or so.
+
+- Settings:
+    x Duration of a Pomodoro - slider
+    x Duration of short break - slider
+    x Duration of long break - slider
+    - Number of Pomodoros before suggesting/inducing long break
+
+- Disable settings when timer is on.
+- Enable back when timer stops or is stopped.
+- Provide option to disable internet and notifications when pomodor is on.
+- When timer stops naturally, then disable stopAction and enable startAction, along with setting other variables.

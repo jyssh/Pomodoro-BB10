@@ -8,7 +8,6 @@
 #include <bb/cascades/OrientationSupport>
 #include <bb/cascades/SupportedDisplayOrientation>
 
-
 using namespace bb::cascades;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
