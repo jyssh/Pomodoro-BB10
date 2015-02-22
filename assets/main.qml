@@ -1,4 +1,6 @@
-import bb.cascades 1.0
+import bb.cascades 1.2
+import bb.device 1.2
+import bb.multimedia 1.2
 import pomodoro.lib 1.0
 
 
@@ -13,7 +15,13 @@ NavigationPane {
     attachedObjects: [
         ComponentDefinition {
             id: appSettingsPage
-            source: 'SettingsPage.qml'
+            source: "SettingsPage.qml"
+        },
+        MediaPlayer {
+            id: mediaPlayer
+        },
+        VibrationController {
+            id: vibrationAlert
         }
     ]
 
@@ -104,6 +112,13 @@ NavigationPane {
             Application.menuEnabled = false
             startAction.enabled = false
             stopAction.enabled = true
+            
+            if (currentTimerType === "PomodoroTimer")
+                mediaPlayer.sourceUrl = appSettings.workTimeoutSound
+            else if (currentTimerType === "ShortBreakTimer")
+                mediaPlayer.sourceUrl = appSettings.shortBreakTimeoutSound
+            else
+                mediaPlayer.sourceUrl = appSettings.longBreakTimeoutSound
         }
 
         function onTimerStopped() {
@@ -116,6 +131,8 @@ NavigationPane {
             Application.menuEnabled = true
             startAction.enabled = true
             stopAction.enabled = false
+            
+            mediaPlayer.play()
 
             if(currentTimerType == "PomodoroTimer") {
                 pomodoroCountBeforeLongBreak += 1
@@ -141,6 +158,9 @@ NavigationPane {
                 currentTimerType = "PomodoroTimer"
                 timer.duration = appSettings.pomodoroDuration
             }
+
+            if (vibrationAlert.isSupported())
+                vibrationAlert.start(100, 2400)
         }
 
         onCreationCompleted: {
@@ -153,11 +173,13 @@ NavigationPane {
     onPopTransitionEnded: {
         Application.menuEnabled = true
 
-        if (currentTimerType === "PomodoroTimer")
+        if (currentTimerType === "PomodoroTimer") {
             timer.duration = appSettings.pomodoroDuration
-        else if (currentTimerType === "ShortBreakTimer")
+        } else if (currentTimerType === "ShortBreakTimer") {
             timer.duration = appSettings.shortBreakDuration
-        else
+        } else {
             timer.duration = appSettings.longBreakDuration
+        }
+            
     }
 }

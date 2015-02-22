@@ -1,10 +1,17 @@
-import bb.cascades 1.0
+import bb.cascades 1.2
+import bb.multimedia 1.2
 
 
 Page {
     titleBar: TitleBar {
         title: "Settings"
     }
+    
+    attachedObjects: [
+        MediaPlayer {
+            id: testPlayer
+        }
+    ]
 
     Container {
         id: settingsContainer
@@ -170,6 +177,144 @@ Page {
         }
 
         Divider { }
+        
+        DropDown {
+            id: workTimeoutSoundSelector
+            title: "Work session timeout"
+            
+            Option {
+                text: "Alien Alarm"
+                value: "asset:///sounds/alien-alarm.mp3"
+            }
+            Option {
+                text: "Strange Alarm"
+                value: "asset:///sounds/strange-alarm.mp3"
+            }
+            Option {
+                text: "Glass Ping"
+                value: "asset:///sounds/glass-ping.mp3"
+            }
+            Option {
+                text: "Ship Bell"
+                value: "asset:///sounds/ship-bell.mp3"
+            }
+            Option {
+                text: "Temple Bell"
+                value: "asset:///sounds/temple-bell.mp3"
+            }
+            Option {
+                text: "Japanese Temple Bell"
+                value: "asset:///sounds/japanese-temple-bell.mp3"
+            }
+            Option {
+                text: "Zen Temple Bell"
+                value: "asset:///sounds/zen-temple-bell.mp3"
+            }
+            
+            onSelectedValueChanged: {
+                appSettings.workTimeoutSound = selectedValue
+                if (workTimeoutSoundSelector.focused) {
+                    testPlayer.sourceUrl = selectedValue
+                    testPlayer.play()
+                }
+            }
+
+            onCreationCompleted: {
+                settingsContainer.setDropDownOptionByValue(workTimeoutSoundSelector, appSettings.workTimeoutSound)
+            }
+        }
+        
+        DropDown {
+            id: shortBreakTimeoutSoundSelector
+            title: "Short Break timeout"
+            
+            Option {
+                text: "Alien Alarm"
+                value: "asset:///sounds/alien-alarm.mp3"
+            }
+            Option {
+                text: "Strange Alarm"
+                value: "asset:///sounds/strange-alarm.mp3"
+            }
+            Option {
+                text: "Glass Ping"
+                value: "asset:///sounds/glass-ping.mp3"
+            }
+            Option {
+                text: "Ship Bell"
+                value: "asset:///sounds/ship-bell.mp3"
+            }
+            Option {
+                text: "Temple Bell"
+                value: "asset:///sounds/temple-bell.mp3"
+            }
+            Option {
+                text: "Japanese Temple Bell"
+                value: "asset:///sounds/japanese-temple-bell.mp3"
+            }
+            Option {
+                text: "Zen Temple Bell"
+                value: "asset:///sounds/zen-temple-bell.mp3"
+            }            
+            
+            onSelectedValueChanged: {
+                appSettings.shortBreakTimeoutSound = selectedValue
+                if (shortBreakTimeoutSoundSelector.focused) {
+                    testPlayer.sourceUrl = selectedValue
+                    testPlayer.play()
+                }
+            }
+
+            onCreationCompleted: {
+                settingsContainer.setDropDownOptionByValue(shortBreakTimeoutSoundSelector, appSettings.shortBreakTimeoutSound)
+            }
+        }
+        
+        DropDown {
+            id: longBreakTimeoutSoundSelector
+            title: "Long Break timeout"
+            
+            Option {
+                text: "Alien Alarm"
+                value: "asset:///sounds/alien-alarm.mp3"
+            }
+            Option {
+                text: "Strange Alarm"
+                value: "asset:///sounds/strange-alarm.mp3"
+            }
+            Option {
+                text: "Glass Ping"
+                value: "asset:///sounds/glass-ping.mp3"
+            }
+            Option {
+                text: "Ship Bell"
+                value: "asset:///sounds/ship-bell.mp3"
+            }
+            Option {
+                text: "Temple Bell"
+                value: "asset:///sounds/temple-bell.mp3"
+            }
+            Option {
+                text: "Japanese Temple Bell"
+                value: "asset:///sounds/japanese-temple-bell.mp3"
+            }
+            Option {
+                text: "Zen Temple Bell"
+                value: "asset:///sounds/zen-temple-bell.mp3"
+            }
+            
+            onSelectedValueChanged: {
+                appSettings.longBreakTimeoutSound = selectedValue
+                if (longBreakTimeoutSoundSelector.focused) {
+                    testPlayer.sourceUrl = selectedValue
+                    testPlayer.play()
+                }
+            }
+
+            onCreationCompleted: {
+                settingsContainer.setDropDownOptionByValue(longBreakTimeoutSoundSelector, appSettings.longBreakTimeoutSound)
+            }
+        }
 
         function setDropDownOptionByValue(dropdown, value) {
             for(var i = 0; i < dropdown.options.length; ++i) {
