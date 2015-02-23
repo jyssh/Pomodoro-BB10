@@ -11,6 +11,7 @@
 #include <QPair>
 #include <QVector>
 #include <QTime>
+#include <QString>
 
 using namespace bb::cascades;
 
@@ -23,6 +24,7 @@ class CircularTimer: public CustomControl
 public:
     CircularTimer(Container *parent = 0);
     int duration() const;
+    Q_INVOKABLE QString timeLeft() const;
     Q_INVOKABLE bool isActive() const;
 
 public slots:

@@ -1,6 +1,7 @@
 #include "applicationui.h"
 #include "CircularTimer.h"
 #include "AppSettings.h"
+#include "ActiveFrame.h"
 
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
@@ -20,6 +21,10 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     QmlDocument *qml = QmlDocument::create("asset:///main.qml");
 
     qml->setContextProperty("appSettings", new AppSettings(this));
+
+    ActiveFrame *activeFrame = new ActiveFrame();
+    Application::instance()->setCover(activeFrame);
+    qml->setContextProperty("activeFrame", activeFrame);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

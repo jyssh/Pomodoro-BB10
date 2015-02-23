@@ -1,3 +1,5 @@
+- Reinstall for final testing.
+- Do not forget to attribute the tones in settings page.
 - Add doc to help.
 	- What is Pomodoro Technique
 	- Inventor
@@ -5,11 +7,10 @@
 	- How it works
 	- How it helps
 - Add notifications.
-	- sound
-	- led
-	- vibration
-- Provide an option to change the notification sounds.
-- Create a regularly updated active frame.
+	x sound
+	x vibration
+x Provide an option to change the notification sounds.
+x Create a regularly updated active frame.
 - Application icon
 - Splash screen?
 - Settle on paid app with a few days trial.

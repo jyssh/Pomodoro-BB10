@@ -11,65 +11,47 @@
 #include <QSettings>
 #include <QDebug>
 
-
 const int CircularTimer::INITIAL_ANGLE = 270;
 const int CircularTimer::SECOND_HAND_MOVEMENT_ANGLE = 6;
 const int CircularTimer::DEFAULT_DURATION = 25;
 
-
-CircularTimer::CircularTimer(Container *parent):
-    CustomControl(parent),
-    mDuration(DEFAULT_DURATION),
-    m_startTime(0, 0, 0),
-    m_endTime(0, DEFAULT_DURATION, 0),
-    m_updateTimer(new QTimer(this))
+CircularTimer::CircularTimer(Container *parent) :
+        CustomControl(parent), mDuration(DEFAULT_DURATION), m_startTime(0, 0, 0), m_endTime(0,
+                DEFAULT_DURATION, 0), m_updateTimer(new QTimer(this))
 {
     m_secondHand = Image(QUrl("asset:///images/handle_inactive.png"));
-    m_secondHandle = ImageView::create()
-            .image(m_secondHand)
-            .horizontal(HorizontalAlignment::Right)
-            .vertical(VerticalAlignment::Center);
-    m_secondHandleContainer = Container::create()
-            .layout(new DockLayout())
-            .add(m_secondHandle);
-    m_secondDial = ImageView::create().image(QUrl("asset:///images/slider_track.png"))
-            .horizontal(HorizontalAlignment::Center)
-            .vertical(VerticalAlignment::Center);
+    m_secondHandle =
+            ImageView::create().image(m_secondHand).horizontal(HorizontalAlignment::Right).vertical(
+                    VerticalAlignment::Center);
+    m_secondHandleContainer = Container::create().layout(new DockLayout()).add(m_secondHandle);
+    m_secondDial = ImageView::create().image(QUrl("asset:///images/slider_track.png")).horizontal(
+            HorizontalAlignment::Center).vertical(VerticalAlignment::Center);
 
     m_minuteHand = Image(QUrl("asset:///images/handle_inactive.png"));
-    m_minuteHandle = ImageView::create()
-            .image(m_minuteHand)
-            .horizontal(HorizontalAlignment::Right)
-            .vertical(VerticalAlignment::Center);
-    m_minuteHandleContainer = Container::create()
-            .layout(new DockLayout())
-            .add(m_minuteHandle);
-    m_minuteDial = ImageView::create().image(QUrl("asset:///images/slider_track.png"))
-            .horizontal(HorizontalAlignment::Center)
-            .vertical(VerticalAlignment::Center);
-    m_minuteHandContainer = Container::create().layout(new DockLayout())
-            .horizontal(HorizontalAlignment::Center)
-            .vertical(VerticalAlignment::Center)
-            .add(m_minuteDial)
-            .add(m_minuteHandleContainer);
+    m_minuteHandle =
+            ImageView::create().image(m_minuteHand).horizontal(HorizontalAlignment::Right).vertical(
+                    VerticalAlignment::Center);
+    m_minuteHandleContainer = Container::create().layout(new DockLayout()).add(m_minuteHandle);
+    m_minuteDial = ImageView::create().image(QUrl("asset:///images/slider_track.png")).horizontal(
+            HorizontalAlignment::Center).vertical(VerticalAlignment::Center);
+    m_minuteHandContainer = Container::create().layout(new DockLayout()).horizontal(
+            HorizontalAlignment::Center).vertical(VerticalAlignment::Center).add(m_minuteDial).add(
+            m_minuteHandleContainer);
 
-    m_digitalTime = Label::create()
-            .horizontal(HorizontalAlignment::Center)
-            .vertical(VerticalAlignment::Center);
+    m_digitalTime = Label::create().horizontal(HorizontalAlignment::Center).vertical(
+            VerticalAlignment::Center);
     m_digitalTime->textStyle()->setFontSize(FontSize::XXLarge);
 
-    m_rootContainer = Container::create()
-            .layout(new DockLayout())
-            .add(m_secondDial)
-            .add(m_secondHandleContainer)
-            .add(m_minuteHandContainer)
-            .add(m_digitalTime);
+    m_rootContainer = Container::create().layout(new DockLayout()).add(m_secondDial).add(
+            m_secondHandleContainer).add(m_minuteHandContainer).add(m_digitalTime);
     setRoot(m_rootContainer);
 
     bool ok;
-    ok = QObject::connect(this, SIGNAL(preferredHeightChanged(float)), this, SLOT(onHeightChanged(float)));
+    ok = QObject::connect(this, SIGNAL(preferredHeightChanged(float)), this,
+            SLOT(onHeightChanged(float)));
     Q_ASSERT(ok);
-    ok = QObject::connect(this, SIGNAL(preferredWidthChanged(float)), this, SLOT(onWidthChanged(float)));
+    ok = QObject::connect(this, SIGNAL(preferredWidthChanged(float)), this,
+            SLOT(onWidthChanged(float)));
     Q_ASSERT(ok);
     ok = QObject::connect(this, SIGNAL(durationChanged(int)), this, SLOT(onDurationChanged(int)));
     Q_ASSERT(ok);
@@ -120,11 +102,12 @@ void CircularTimer::updateHands()
     int elapsedSecs = m_startTime.secsTo(QTime::currentTime());
     QTime elapsedTime = QTime(0, 0, 0).addSecs(elapsedSecs);
     int secondsLeft = elapsedTime.secsTo(m_endTime);
-    if(secondsLeft >= 0) {
+    if (secondsLeft >= 0) {
         QTime timeLeft = QTime(0, 0, 0).addSecs(secondsLeft);
         m_digitalTime->setText(timeLeft.toString("mm.ss"));
 
-        m_secondHandleContainer->setRotationZ(m_secondHandleContainer->rotationZ() + SECOND_HAND_MOVEMENT_ANGLE);
+        m_secondHandleContainer->setRotationZ(
+                m_secondHandleContainer->rotationZ() + SECOND_HAND_MOVEMENT_ANGLE);
 
         double minuteMovement = elapsedTime.minute() * mMinuteHandMovementAngle + 270;
         if (minuteMovement > (360 + 270))
@@ -178,6 +161,18 @@ void CircularTimer::onDurationChanged(int duration)
     mMinuteHandMovementAngle = 360 / (double) duration;
 }
 
+QString CircularTimer::timeLeft() const
+{
+    if (isActive()) {
+        int elapsedSecs = m_startTime.secsTo(QTime::currentTime());
+        QTime elapsedTime = QTime(0, 0, 0).addSecs(elapsedSecs);
+        int secondsLeft = elapsedTime.secsTo(m_endTime);
+        QTime timeLeft = QTime(0, 0, 0).addSecs(secondsLeft);
+        return timeLeft.toString("mm.ss");
+    }
+    return m_endTime.toString("mm.ss");
+}
+
 bool CircularTimer::isActive() const
 {
     return m_updateTimer->isActive();
@@ -185,22 +180,24 @@ bool CircularTimer::isActive() const
 
 void CircularTimer::resetHandsWithoutAnimation()
 {
-    if(m_secondHandleContainer->rotationZ() != INITIAL_ANGLE) {
-        ImplicitAnimationController secondController = ImplicitAnimationController::create(m_secondHandleContainer).enabled(false);
+    if (m_secondHandleContainer->rotationZ() != INITIAL_ANGLE) {
+        ImplicitAnimationController secondController = ImplicitAnimationController::create(
+                m_secondHandleContainer).enabled(false);
         m_secondHandleContainer->setRotationZ(INITIAL_ANGLE);
     }
-    if(m_minuteHandleContainer->rotationZ() != INITIAL_ANGLE) {
-        ImplicitAnimationController minuteController = ImplicitAnimationController::create(m_minuteHandleContainer).enabled(false);
+    if (m_minuteHandleContainer->rotationZ() != INITIAL_ANGLE) {
+        ImplicitAnimationController minuteController = ImplicitAnimationController::create(
+                m_minuteHandleContainer).enabled(false);
         m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
     }
 }
 
 void CircularTimer::resetHandsWithAnimation()
 {
-    if(m_secondHandleContainer->rotationZ() != INITIAL_ANGLE) {
+    if (m_secondHandleContainer->rotationZ() != INITIAL_ANGLE) {
         m_secondHandleContainer->setRotationZ(INITIAL_ANGLE);
     }
-    if(m_minuteHandleContainer->rotationZ() != INITIAL_ANGLE) {
+    if (m_minuteHandleContainer->rotationZ() != INITIAL_ANGLE) {
         m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
     }
 }

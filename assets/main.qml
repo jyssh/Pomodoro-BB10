@@ -3,14 +3,21 @@ import bb.device 1.2
 import bb.multimedia 1.2
 import pomodoro.lib 1.0
 
-
 NavigationPane {
     id: rootNavPane
+    
+    property string workTitle: "Work Time!"
+    property string shortBreakTitle: "Take a Short Break!"
+    property string longBreakTitle: "Take a Long Break!"
+    
+    property string workTimerType: "PomorodoTimer"
+    property string shortBreakTimerType: "ShortBreakTimer"
+    property string longBreakTimerType: "LongBreakTimer"
 
     property int pomodoroCountBeforeLongBreak: 0
     property int totalPomodoroCount: 0
     property int totalWorkMinutes: 0
-    property string currentTimerType: "PomodoroTimer"
+    property string currentTimerType: workTimerType
 
     attachedObjects: [
         ComponentDefinition {
@@ -26,7 +33,8 @@ NavigationPane {
     ]
 
     Menu.definition: MenuDefinition {
-        helpAction: HelpActionItem {}
+        helpAction: HelpActionItem {
+        }
         settingsAction: SettingsActionItem {
             onTriggered: {
                 var page = appSettingsPage.createObject()
@@ -40,7 +48,8 @@ NavigationPane {
         id: timerPage
 
         Container {
-            layout: DockLayout {}
+            layout: DockLayout {
+            }
 
             Container {
                 horizontalAlignment: HorizontalAlignment.Center
@@ -48,7 +57,7 @@ NavigationPane {
 
                 Label {
                     id: timerTypeLabel
-                    text: "Work Time!"
+                    text: workTitle
                     textStyle {
                         fontSize: FontSize.XLarge
                     }
@@ -75,7 +84,7 @@ NavigationPane {
 
                 Label {
                     id: totalWorkHoursLabel
-                    text: "That would be 0 hours 0 minutes."
+                    text: "That is 0 hours 0 minutes."
                     textStyle {
                         fontSize: FontSize.Large
                     }
@@ -85,7 +94,7 @@ NavigationPane {
             }
         }
 
-        actions:  [
+        actions: [
             ActionItem {
                 id: startAction
                 title: "Start"
@@ -102,7 +111,7 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.OnBar
                 enabled: false
                 onTriggered: {
-                    if(timer.isActive())
+                    if (timer.isActive())
                         timer.stop()
                 }
             }
@@ -112,11 +121,11 @@ NavigationPane {
             Application.menuEnabled = false
             startAction.enabled = false
             stopAction.enabled = true
-            
-            if (currentTimerType === "PomodoroTimer")
-                mediaPlayer.sourceUrl = appSettings.workTimeoutSound
-            else if (currentTimerType === "ShortBreakTimer")
-                mediaPlayer.sourceUrl = appSettings.shortBreakTimeoutSound
+
+            if (currentTimerType === workTimerType)
+                mediaPlayer.sourceUrl = appSettings.workTimeoutSound;
+            else if (currentTimerType === shortBreakTimerType)
+                mediaPlayer.sourceUrl = appSettings.shortBreakTimeoutSound;
             else
                 mediaPlayer.sourceUrl = appSettings.longBreakTimeoutSound
         }
@@ -131,31 +140,31 @@ NavigationPane {
             Application.menuEnabled = true
             startAction.enabled = true
             stopAction.enabled = false
-            
+
             mediaPlayer.play()
 
-            if(currentTimerType == "PomodoroTimer") {
+            if (currentTimerType == workTimerType) {
                 pomodoroCountBeforeLongBreak += 1
 
                 totalPomodoroCount += 1
                 totalPomodoroCountLabel.text = "You worked for " + totalPomodoroCount + " Pomodoros."
-                
-                totalWorkMinutes += appSettings.pomodoroDuration
-                totalWorkHoursLabel.text = "That would be " + Math.floor(totalWorkMinutes/60) + " hours " + (totalWorkMinutes % 60) + " minutes."
 
-                if(pomodoroCountBeforeLongBreak >= appSettings.pomodorosBeforeLongBreak) {
-                    timerTypeLabel.text = "Take a Long Break!"
-                    currentTimerType = "LongBreakTimer"
+                totalWorkMinutes += appSettings.pomodoroDuration
+                totalWorkHoursLabel.text = "That is " + Math.floor(totalWorkMinutes / 60) + " hours " + (totalWorkMinutes % 60) + " minutes."
+
+                if (pomodoroCountBeforeLongBreak >= appSettings.pomodorosBeforeLongBreak) {
+                    timerTypeLabel.text = longBreakTitle
+                    currentTimerType = longBreakTimerType
                     timer.duration = appSettings.longBreakDuration
                     pomodoroCountBeforeLongBreak = 0
                 } else {
-                    timerTypeLabel.text = "Take a Short Break!"
-                    currentTimerType = "ShortBreakTimer"
+                    timerTypeLabel.text = shortBreakTitle
+                    currentTimerType = shortBreakTimerType
                     timer.duration = appSettings.shortBreakDuration
                 }
             } else {
-                timerTypeLabel.text = "Work Time!"
-                currentTimerType = "PomodoroTimer"
+                timerTypeLabel.text = workTitle
+                currentTimerType = workTimerType
                 timer.duration = appSettings.pomodoroDuration
             }
 
@@ -173,13 +182,21 @@ NavigationPane {
     onPopTransitionEnded: {
         Application.menuEnabled = true
 
-        if (currentTimerType === "PomodoroTimer") {
+        if (currentTimerType === workTimerType) {
             timer.duration = appSettings.pomodoroDuration
-        } else if (currentTimerType === "ShortBreakTimer") {
+        } else if (currentTimerType === shortBreakTimerType) {
             timer.duration = appSettings.shortBreakDuration
         } else {
             timer.duration = appSettings.longBreakDuration
         }
-            
     }
+
+    onCreationCompleted: {
+        Application.thumbnail.connect(onThumbnail)
+    }
+
+    function onThumbnail() {
+        activeFrame.update(timerTypeLabel.text, timer.timeLeft().split(".")[0] + ".XX")
+    }
+
 }
