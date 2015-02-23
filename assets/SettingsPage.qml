@@ -315,6 +315,10 @@ Page {
                 settingsContainer.setDropDownOptionByValue(longBreakTimeoutSoundSelector, appSettings.longBreakTimeoutSound)
             }
         }
+        
+        Label {
+            text: "The sounds are recorded by Mike Koenig and KevanGC."
+        }
 
         function setDropDownOptionByValue(dropdown, value) {
             for(var i = 0; i < dropdown.options.length; ++i) {

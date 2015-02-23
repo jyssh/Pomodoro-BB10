@@ -3,6 +3,8 @@
 #include "AppSettings.h"
 #include "ActiveFrame.h"
 
+#include <QTimer>
+
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
 #include <bb/cascades/AbstractPane>
@@ -14,6 +16,7 @@ using namespace bb::cascades;
 ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
     QObject(app)
 {
+    qmlRegisterType<QTimer>("pomodoro.lib", 1, 0, "QTimer");
     qmlRegisterType<CircularTimer>("pomodoro.lib", 1, 0, "CircularTimer");
 
     // By default the QmlDocument object is owned by the Application instance

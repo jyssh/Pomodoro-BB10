@@ -18,6 +18,8 @@ NavigationPane {
     property int totalPomodoroCount: 0
     property int totalWorkMinutes: 0
     property string currentTimerType: workTimerType
+    
+    property bool isActiveFrame: false
 
     attachedObjects: [
         ComponentDefinition {
@@ -29,6 +31,14 @@ NavigationPane {
         },
         VibrationController {
             id: vibrationAlert
+        },
+        QTimer {
+            id: activeFrameTimer
+            singleShot: true
+            interval: 60000
+            onTimeout: {
+                updateActiveFrame()
+            }
         }
     ]
 
@@ -192,11 +202,24 @@ NavigationPane {
     }
 
     onCreationCompleted: {
-        Application.thumbnail.connect(onThumbnail)
+        Application.thumbnail.connect(backgrounded)
+        Application.fullscreen.connect(foregrounded)
+    }
+    
+    function foregrounded() {
+        isActiveFrame = false
+        activeFrameTimer.stop()
+    }
+    
+    function backgrounded() {
+        isActiveFrame = true
+        updateActiveFrame()
     }
 
-    function onThumbnail() {
-        activeFrame.update(timerTypeLabel.text, timer.timeLeft().split(".")[0] + ".XX")
+    function updateActiveFrame() {
+        if (isActiveFrame) {
+            activeFrameTimer.start()
+            activeFrame.update(timerTypeLabel.text, timer.timeLeft().split(".")[0] + ".XX")
+        }
     }
-
 }

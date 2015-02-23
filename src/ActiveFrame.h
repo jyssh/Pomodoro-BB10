@@ -28,7 +28,6 @@ public slots:
 private:
     Label *mTimerType;
     Label *mTimeLeft;
-
 };
 
 #endif /* ACTIVEFRAME_H_ */
