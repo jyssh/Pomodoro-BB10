@@ -24,21 +24,7 @@ Page {
         DropDown {
             id: pomodoroDurationSelector
             title: "Pomodoro Duration"
-            Option {
-                value: 1
-                text: "1 minutes"
-            }
-
-            Option {
-                value: 2
-                text: "2 minutes"
-            }
             
-            Option {
-                value: 7
-                text: "7 minutes"
-            }
-
             Option {
                 value: 25
                 text: "25 minutes"
@@ -65,20 +51,14 @@ Page {
             }
 
             onCreationCompleted: {
-                if(appSettings.pomodoroDuration === 0)
-                    setSelectedIndex(0);
-                else
-                    settingsContainer.setDropDownOptionByValue(pomodoroDurationSelector, appSettings.pomodoroDuration);
+                if(!settingsContainer.setDropDownOptionByValue(pomodoroDurationSelector, appSettings.pomodoroDuration))
+                    setSelectedIndex(0)
             }
         }
 
         DropDown {
             id: shortBreakDurationSelector
             title: "Short Break Duration"
-            Option {
-                value: 1
-                text: "1 minutes"
-            }
 
             Option {
                 value: 5
@@ -95,20 +75,14 @@ Page {
             }
 
             onCreationCompleted: {
-                if(appSettings.shortBreakDuration === 0)
+                if(!settingsContainer.setDropDownOptionByValue(shortBreakDurationSelector, appSettings.shortBreakDuration))
                     setSelectedIndex(0);
-                else
-                    settingsContainer.setDropDownOptionByValue(shortBreakDurationSelector, appSettings.shortBreakDuration);
             }
         }
 
         DropDown {
             id: longBreakDurationSelector
             title: "Long Break Duration"
-            Option {
-                value: 1
-                text: "1 minutes"
-            }
 
             Option {
                 value: 15
@@ -129,10 +103,8 @@ Page {
             }
 
             onCreationCompleted: {
-                if(appSettings.longBreakDuration === 0)
+                if(!settingsContainer.setDropDownOptionByValue(longBreakDurationSelector, appSettings.longBreakDuration))
                     setSelectedIndex(0)
-                else
-                    settingsContainer.setDropDownOptionByValue(longBreakDurationSelector, appSettings.longBreakDuration)
             }
         }
 
@@ -141,10 +113,6 @@ Page {
         DropDown {
             id: pomodorosBeforeLongBreakSelector
             title: "Long Break After"
-            Option {
-                value: 2
-                text: "2 Pomodoros"
-            }
 
             Option {
                 value: 3
@@ -169,10 +137,8 @@ Page {
             }
 
             onCreationCompleted: {
-                if(appSettings.pomodorosBeforeLongBreak === 0)
+                if(!settingsContainer.setDropDownOptionByValue(pomodorosBeforeLongBreakSelector, appSettings.pomodorosBeforeLongBreak))
                     setSelectedIndex(0)
-                else
-                    settingsContainer.setDropDownOptionByValue(pomodorosBeforeLongBreakSelector, appSettings.pomodorosBeforeLongBreak)
             }
         }
 
@@ -189,10 +155,6 @@ Page {
             Option {
                 text: "Strange Alarm"
                 value: "asset:///sounds/strange-alarm.mp3"
-            }
-            Option {
-                text: "Glass Ping"
-                value: "asset:///sounds/glass-ping.mp3"
             }
             Option {
                 text: "Ship Bell"
@@ -220,7 +182,8 @@ Page {
             }
 
             onCreationCompleted: {
-                settingsContainer.setDropDownOptionByValue(workTimeoutSoundSelector, appSettings.workTimeoutSound)
+                if(!settingsContainer.setDropDownOptionByValue(workTimeoutSoundSelector, appSettings.workTimeoutSound))
+                    setSelectedIndex(0)
             }
         }
         
@@ -235,10 +198,6 @@ Page {
             Option {
                 text: "Strange Alarm"
                 value: "asset:///sounds/strange-alarm.mp3"
-            }
-            Option {
-                text: "Glass Ping"
-                value: "asset:///sounds/glass-ping.mp3"
             }
             Option {
                 text: "Ship Bell"
@@ -266,7 +225,8 @@ Page {
             }
 
             onCreationCompleted: {
-                settingsContainer.setDropDownOptionByValue(shortBreakTimeoutSoundSelector, appSettings.shortBreakTimeoutSound)
+                if(!settingsContainer.setDropDownOptionByValue(shortBreakTimeoutSoundSelector, appSettings.shortBreakTimeoutSound))
+                    setSelectedIndex(0)
             }
         }
         
@@ -281,10 +241,6 @@ Page {
             Option {
                 text: "Strange Alarm"
                 value: "asset:///sounds/strange-alarm.mp3"
-            }
-            Option {
-                text: "Glass Ping"
-                value: "asset:///sounds/glass-ping.mp3"
             }
             Option {
                 text: "Ship Bell"
@@ -312,14 +268,11 @@ Page {
             }
 
             onCreationCompleted: {
-                settingsContainer.setDropDownOptionByValue(longBreakTimeoutSoundSelector, appSettings.longBreakTimeoutSound)
+                if(!settingsContainer.setDropDownOptionByValue(longBreakTimeoutSoundSelector, appSettings.longBreakTimeoutSound))
+                    setSelectedIndex(0)
             }
         }
         
-        Label {
-            text: "The sounds are recorded by Mike Koenig and KevanGC."
-        }
-
         function setDropDownOptionByValue(dropdown, value) {
             for(var i = 0; i < dropdown.options.length; ++i) {
                 var option = dropdown.options[i];

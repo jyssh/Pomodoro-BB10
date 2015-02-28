@@ -1,20 +1,24 @@
-- Reinstall for final testing.
-- Do not forget to attribute the tones in settings page.
 - Add doc to help.
+    - Note the omission of system sounds. Did that to distinguish.
 	- What is Pomodoro Technique
 	- Inventor
 	- Reason behind name
 	- How it works
 	- How it helps
-- Add notifications.
+- Reinstall for final testing.
+- Settle on paid app with a few days trial.
+- Provide option to disable internet and notifications when pomodoro is on.
+
+x Tweak info on active frame.
+    x When less than one min left, show '< 1 min left' instead of '~ 00 min left'
+    x Consider not using leading 0 in case of single digit time.
+x Do not forget to attribute the tones in settings page.
+x Add notifications.
 	x sound
 	x vibration
 x Provide an option to change the notification sounds.
 x Create a regularly updated active frame.
-- Application icon
-- Splash screen?
-- Settle on paid app with a few days trial.
-- Provide option to disable internet and notifications when pomodoro is on.
+x Application icon
 
 x Add icons. Refer to the website stored in phone history.
 x Set appropriate duration in timer when settings page is swiped out.

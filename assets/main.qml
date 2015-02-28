@@ -5,11 +5,11 @@ import pomodoro.lib 1.0
 
 NavigationPane {
     id: rootNavPane
-    
-    property string workTitle: "Work Time!"
-    property string shortBreakTitle: "Take a Short Break!"
-    property string longBreakTitle: "Take a Long Break!"
-    
+
+    property string workTitle: "Work Time"
+    property string shortBreakTitle: "Short Break"
+    property string longBreakTitle: "Long Break"
+
     property string workTimerType: "PomorodoTimer"
     property string shortBreakTimerType: "ShortBreakTimer"
     property string longBreakTimerType: "LongBreakTimer"
@@ -18,13 +18,17 @@ NavigationPane {
     property int totalPomodoroCount: 0
     property int totalWorkMinutes: 0
     property string currentTimerType: workTimerType
-    
-    property bool isActiveFrame: false
 
+    property bool isActiveFrame: false
+    
     attachedObjects: [
         ComponentDefinition {
             id: appSettingsPage
             source: "SettingsPage.qml"
+        },
+        ComponentDefinition {
+            id: creditsPage
+            source: "CreditsPage.qml"
         },
         MediaPlayer {
             id: mediaPlayer
@@ -52,6 +56,17 @@ NavigationPane {
                 rootNavPane.push(page)
             }
         }
+        actions: [
+            ActionItem {
+                title: "Credits"
+                imageSource: "asset:///images/info.png"
+                onTriggered: {
+                    var page = creditsPage.createObject()
+                    Application.menuEnabled = false
+                    rootNavPane.push(page)
+                }
+            }
+        ]
     }
 
     Page {
@@ -205,12 +220,12 @@ NavigationPane {
         Application.thumbnail.connect(backgrounded)
         Application.fullscreen.connect(foregrounded)
     }
-    
+
     function foregrounded() {
         isActiveFrame = false
         activeFrameTimer.stop()
     }
-    
+
     function backgrounded() {
         isActiveFrame = true
         updateActiveFrame()
@@ -219,7 +234,15 @@ NavigationPane {
     function updateActiveFrame() {
         if (isActiveFrame) {
             activeFrameTimer.start()
-            activeFrame.update(timerTypeLabel.text, timer.timeLeft().split(".")[0] + ".XX")
+
+            var minsLeft = parseInt(timer.timeLeft().split(".")[0])
+            var txt = ''
+            if (minsLeft > 0)
+                txt = '~ ' + minsLeft.toString() + " mins left"
+            else
+                txt = '< 1 min left'
+            
+            activeFrame.update(timerTypeLabel.text, txt)
         }
     }
 }
