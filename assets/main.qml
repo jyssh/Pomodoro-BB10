@@ -27,6 +27,10 @@ NavigationPane {
             source: "SettingsPage.qml"
         },
         ComponentDefinition {
+            id: helpPage
+            source: "HelpPage.qml"
+        },
+        ComponentDefinition {
             id: creditsPage
             source: "CreditsPage.qml"
         },
@@ -48,6 +52,11 @@ NavigationPane {
 
     Menu.definition: MenuDefinition {
         helpAction: HelpActionItem {
+            onTriggered: {
+                var page = helpPage.createObject()
+                Application.menuEnabled = false
+                rootNavPane.push(page)
+            }
         }
         settingsAction: SettingsActionItem {
             onTriggered: {
@@ -99,7 +108,7 @@ NavigationPane {
 
                 Label {
                     id: totalPomodoroCountLabel
-                    text: "You worked for 0 Pomodoros."
+                    text: "You have worked for 0 Pomodoro."
                     textStyle {
                         fontSize: FontSize.Large
                     }
@@ -109,7 +118,7 @@ NavigationPane {
 
                 Label {
                     id: totalWorkHoursLabel
-                    text: "That is 0 hours 0 minutes."
+                    text: "That is 0 hour 0 minute."
                     textStyle {
                         fontSize: FontSize.Large
                     }
@@ -172,7 +181,7 @@ NavigationPane {
                 pomodoroCountBeforeLongBreak += 1
 
                 totalPomodoroCount += 1
-                totalPomodoroCountLabel.text = "You worked for " + totalPomodoroCount + " Pomodoros."
+                totalPomodoroCountLabel.text = "You have worked for " + totalPomodoroCount + " Pomodori."
 
                 totalWorkMinutes += appSettings.pomodoroDuration
                 totalWorkHoursLabel.text = "That is " + Math.floor(totalWorkMinutes / 60) + " hours " + (totalWorkMinutes % 60) + " minutes."

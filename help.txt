@@ -1,0 +1,44 @@
+What is the app about?
+Pomodoro Timer app servers as a timer for the Pomodoro Technique, a famous time-management and productivity method developed by Francesco Cirillo.
+In this method, work is broken down into small tasks. Parallely, time is divided into chunks of several minutes (traditionally 25 minutes), each chunk called a Pomodoro.
+A task to be done may span one or several pomodori. Each pomodoro is followed by a short period of break. After certain number of pomodori, a break of longer period is taken.
+
+The method can be followed in the following steps:
+1. Decide the task to be completed
+2. Start the pomodoro timer
+3. Work on the task until the timer rings.
+4. Take a short break.
+5. After certain amount of pomodori, take a longer break.
+
+The idea here is to concentrate only and only on the task during a Pomodoro.
+Any other distraction like a phone call are to be posptponed till the timer ends. They may be dealt with during the break time.
+If the distraction is unavoidable, then the Pomodoro has to be abandoned entirely.
+
+How does the app work?
+
+The app provides settings to configure various aspects of the timer.
+
+You may change the durations and alert sounds of
+- Pomodoro timer
+- Short break timer
+- Long break timer
+
+Also, you may configure the number of pomodori after which the long break timer is triggered.
+
+I decided not to use sounds provided by BB10 OS in order to distinguish the alerts.
+
+Traditionally, the technique recommends a
+- 25-minutes Pomodoro
+- 5-minutes short break
+- 15-minutes long break
+- long break after 4 pomodori.
+
+After configuring the timers to your liking, start using the timer as explained in the steps.
+I recommend turning on the 'Silent' or 'Phone Calls Only' profile while working. The app alerts are played regardless of the profile.
+True to the original method, there is no 'Pause' button, but only 'Stop' button to a timer.
+
+Active Frame
+When the app is minimized, the active frame displays the name of the current timer and the minutes left in the timer.
+
+Why Tomato?
+Pomodoro means tomato in Spanish. This technique was probably named after the mechanical kitchen timers, often shaped like tomatoes.
