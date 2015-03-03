@@ -16,8 +16,11 @@ const int CircularTimer::SECOND_HAND_MOVEMENT_ANGLE = 6;
 const int CircularTimer::DEFAULT_DURATION = 25;
 
 CircularTimer::CircularTimer(Container *parent) :
-        CustomControl(parent), mDuration(DEFAULT_DURATION), m_startTime(0, 0, 0), m_endTime(0,
-                DEFAULT_DURATION, 0), m_updateTimer(new QTimer(this))
+        CustomControl(parent),
+        mDuration(DEFAULT_DURATION),
+        m_startTime(0, 0, 0),
+        m_endTime(0, DEFAULT_DURATION, 0),
+        m_updateTimer(new QTimer(this))
 {
     m_secondHand = Image(QUrl("asset:///images/handle_inactive.png"));
     m_secondHandle =
@@ -47,6 +50,7 @@ CircularTimer::CircularTimer(Container *parent) :
     setRoot(m_rootContainer);
 
     bool ok;
+    Q_UNUSED(ok);
     ok = QObject::connect(this, SIGNAL(preferredHeightChanged(float)), this,
             SLOT(onHeightChanged(float)));
     Q_ASSERT(ok);

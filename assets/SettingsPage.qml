@@ -24,7 +24,7 @@ Page {
         DropDown {
             id: pomodoroDurationSelector
             title: "Pomodoro Duration"
-            
+
             Option {
                 value: 25
                 text: "25 minutes"
@@ -108,7 +108,9 @@ Page {
             }
         }
 
-        Divider { }
+        Divider {
+            accessibility.name: "Section Break"
+        }
 
         DropDown {
             id: pomodorosBeforeLongBreakSelector
@@ -142,7 +144,9 @@ Page {
             }
         }
 
-        Divider { }
+        Divider {
+            accessibility.name: "Section Break"
+        }
         
         DropDown {
             id: workTimeoutSoundSelector

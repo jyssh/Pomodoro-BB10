@@ -244,7 +244,7 @@ NavigationPane {
         if (isActiveFrame) {
             activeFrameTimer.start()
 
-            var minsLeft = parseInt(timer.timeLeft().split(".")[0])
+            var minsLeft = parseInt(timer.timeLeft().split(".")[0], 10)
             var txt = ''
             if (minsLeft > 0)
                 txt = '~ ' + minsLeft.toString() + " mins left"

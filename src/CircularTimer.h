@@ -71,12 +71,12 @@ private:
 
     Label* m_digitalTime;
 
-    QTimer* m_updateTimer;
+    int mDuration;
+    double mMinuteHandMovementAngle;
+
     QTime m_startTime;
     QTime m_endTime;
-
-    double mMinuteHandMovementAngle;
-    int mDuration;
+    QTimer* m_updateTimer;
 };
 
 #endif // CIRCULARTIMER_H
