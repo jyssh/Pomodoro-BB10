@@ -17,7 +17,7 @@ const QString AppSettings::LONG_BREAK_TIMEOUT_SOUND("longBreakTimeoutSound");
 AppSettings::AppSettings(QObject *parent) : QObject(parent)
 {
     QCoreApplication::setOrganizationName("CodeZombies");
-    QCoreApplication::setApplicationName("Pomodoro");
+    QCoreApplication::setApplicationName("PomodoroTimer");
 
     mPomodoroDuration = QSettings().value(POMODORO_DURATION, 25).toInt();
     mShortBreakDuration = QSettings().value(SHORT_BREAK_DURATION, 5).toInt();
