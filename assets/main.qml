@@ -1,7 +1,8 @@
-import bb.cascades 1.2
+import bb.cascades 1.3
 import bb.device 1.2
 import bb.multimedia 1.2
 import pomodoro.lib 1.0
+import bb.device 1.4
 
 NavigationPane {
     id: rootNavPane
@@ -47,6 +48,9 @@ NavigationPane {
             onTimeout: {
                 updateActiveFrame()
             }
+        },
+        DisplayInfo {
+            id: displayInfo
         }
     ]
 
@@ -93,7 +97,7 @@ NavigationPane {
                     id: timerTypeLabel
                     text: workTitle
                     textStyle {
-                        fontSize: FontSize.XLarge
+                        fontSize: is720() ? FontSize.Medium : FontSize.XLarge
                     }
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
@@ -103,14 +107,18 @@ NavigationPane {
                     id: timer
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
+                    dimension: is720() ? 400 : 700
                     duration: appSettings.pomodoroDuration
+                    digitalTimerSize: is720() ? FontSize.Large : FontSize.XXLarge
                 }
 
                 Label {
                     id: totalPomodoroCountLabel
+                    topMargin: 2
+                    bottomMargin: 3
                     text: "You have worked for 0 Pomodoro."
                     textStyle {
-                        fontSize: FontSize.Large
+                        fontSize: is720() ? FontSize.XSmall : FontSize.Large
                     }
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
@@ -118,9 +126,10 @@ NavigationPane {
 
                 Label {
                     id: totalWorkHoursLabel
+                    topMargin: 3
                     text: "That is 0 hour 0 minute."
                     textStyle {
-                        fontSize: FontSize.Large
+                        fontSize: is720() ? FontSize.XSmall : FontSize.Large
                     }
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
@@ -253,5 +262,9 @@ NavigationPane {
             
             activeFrame.update(timerTypeLabel.text, txt)
         }
+    }
+    
+    function is720() {
+        return displayInfo.pixelSize.width === 720 && displayInfo.pixelSize.height === 720
     }
 }

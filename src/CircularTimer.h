@@ -19,44 +19,49 @@ class CircularTimer: public CustomControl
 {
     Q_OBJECT
 
+    Q_PROPERTY(float dimension READ dimension WRITE setDimension NOTIFY dimensionChanged)
     Q_PROPERTY(int duration READ duration WRITE setDuration NOTIFY durationChanged)
+    Q_PROPERTY(int digitalTimerSize READ digitalTimerSize WRITE setDigitalTimerSize)
 
 public:
     CircularTimer(Container *parent = 0);
     int duration() const;
+    float dimension() const;
+    int digitalTimerSize() const;
     Q_INVOKABLE QString timeLeft() const;
     Q_INVOKABLE bool isActive() const;
 
 public slots:
+    void setDimension(float dimension);
     void setDuration(int duration);
+    void setDigitalTimerSize(int size);
     void start();
     void stop();
 
 signals:
+    void dimensionChanged(float dimension);
     void durationChanged(int duration);
     void timerStarted();
     void timerStopped();
     void timerCompleted();
 
 private slots:
+    void onDimensionChanged(float dimension);
     void onDurationChanged(int duration);
-    void onHeightChanged(float width);
-    void onWidthChanged(float width);
     void updateHands();
 
 private:
-    void onSizeChanged();
     void timeout();
     void resetHandsWithoutAnimation();
     void resetHandsWithAnimation();
 
     Container* m_rootContainer;
-    float m_width;
-    float m_height;
+    float m_dimension;
 
     static const int INITIAL_ANGLE;
     static const int SECOND_HAND_MOVEMENT_ANGLE;
     static const int DEFAULT_DURATION;
+    static const float DEFAULT_DIMENSION;
 
     Image m_secondHand;
     ImageView* m_secondHandle;

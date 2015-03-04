@@ -3,8 +3,8 @@
 #include <bb/cascades/AbsoluteLayout>
 #include <bb/cascades/DockLayout>
 #include <bb/cascades/Color>
-#include <bb/cascades/FontSize>
 #include <bb/cascades/ImplicitAnimationController>
+#include <bb/cascades/FontSize>
 
 #include "math.h"
 
@@ -14,91 +14,97 @@
 const int CircularTimer::INITIAL_ANGLE = 270;
 const int CircularTimer::SECOND_HAND_MOVEMENT_ANGLE = 6;
 const int CircularTimer::DEFAULT_DURATION = 25;
+const float CircularTimer::DEFAULT_DIMENSION = 400;
 
 CircularTimer::CircularTimer(Container *parent) :
         CustomControl(parent),
+        m_dimension(DEFAULT_DIMENSION),
         mDuration(DEFAULT_DURATION),
         m_startTime(0, 0, 0),
         m_endTime(0, DEFAULT_DURATION, 0),
         m_updateTimer(new QTimer(this))
 {
     m_secondHand = Image(QUrl("asset:///images/handle_inactive.png"));
-    m_secondHandle =
-            ImageView::create().image(m_secondHand).horizontal(HorizontalAlignment::Right).vertical(
-                    VerticalAlignment::Center);
+    m_secondHandle = ImageView::create().image(m_secondHand)
+                                        .horizontal(HorizontalAlignment::Right)
+                                        .vertical(VerticalAlignment::Center);
     m_secondHandleContainer = Container::create().layout(new DockLayout()).add(m_secondHandle);
-    m_secondDial = ImageView::create().image(QUrl("asset:///images/slider_track.png")).horizontal(
-            HorizontalAlignment::Center).vertical(VerticalAlignment::Center);
+    m_secondDial = ImageView::create().image(QUrl("asset:///images/slider_track.png"))
+                                      .horizontal(HorizontalAlignment::Center)
+                                      .vertical(VerticalAlignment::Center);
 
     m_minuteHand = Image(QUrl("asset:///images/handle_inactive.png"));
-    m_minuteHandle =
-            ImageView::create().image(m_minuteHand).horizontal(HorizontalAlignment::Right).vertical(
-                    VerticalAlignment::Center);
+    m_minuteHandle = ImageView::create().image(m_minuteHand)
+                                        .horizontal(HorizontalAlignment::Right)
+                                        .vertical(VerticalAlignment::Center);
     m_minuteHandleContainer = Container::create().layout(new DockLayout()).add(m_minuteHandle);
-    m_minuteDial = ImageView::create().image(QUrl("asset:///images/slider_track.png")).horizontal(
-            HorizontalAlignment::Center).vertical(VerticalAlignment::Center);
-    m_minuteHandContainer = Container::create().layout(new DockLayout()).horizontal(
-            HorizontalAlignment::Center).vertical(VerticalAlignment::Center).add(m_minuteDial).add(
-            m_minuteHandleContainer);
+    m_minuteDial = ImageView::create().image(QUrl("asset:///images/slider_track.png"))
+                                      .horizontal(HorizontalAlignment::Center)
+                                      .vertical(VerticalAlignment::Center);
+    m_minuteHandContainer = Container::create().layout(new DockLayout())
+                                               .horizontal(HorizontalAlignment::Center)
+                                               .vertical(VerticalAlignment::Center)
+                                               .add(m_minuteDial)
+                                               .add(m_minuteHandleContainer);
 
     m_digitalTime = Label::create().horizontal(HorizontalAlignment::Center).vertical(
             VerticalAlignment::Center);
-    m_digitalTime->textStyle()->setFontSize(FontSize::XXLarge);
 
-    m_rootContainer = Container::create().layout(new DockLayout()).add(m_secondDial).add(
-            m_secondHandleContainer).add(m_minuteHandContainer).add(m_digitalTime);
+    m_rootContainer = Container::create().layout(new DockLayout())
+                                         .add(m_secondDial).add(m_secondHandleContainer)
+                                         .add(m_minuteHandContainer)
+                                         .add(m_digitalTime)
+                                         .horizontal(HorizontalAlignment::Fill);
+
     setRoot(m_rootContainer);
 
     bool ok;
     Q_UNUSED(ok);
-    ok = QObject::connect(this, SIGNAL(preferredHeightChanged(float)), this,
-            SLOT(onHeightChanged(float)));
-    Q_ASSERT(ok);
-    ok = QObject::connect(this, SIGNAL(preferredWidthChanged(float)), this,
-            SLOT(onWidthChanged(float)));
+    ok = QObject::connect(this, SIGNAL(dimensionChanged(float)), this, SLOT(onDimensionChanged(float)));
     Q_ASSERT(ok);
     ok = QObject::connect(this, SIGNAL(durationChanged(int)), this, SLOT(onDurationChanged(int)));
     Q_ASSERT(ok);
 
-    m_width = 700;
-    m_height = 700;
-    setPreferredSize(m_width, m_height);
-
+//        m_digitalTime->textStyle()->setFontSize(FontSize::XXLarge);
+    setDimension(m_dimension);
     setDuration(mDuration);
 
     ok = QObject::connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateHands()));
     Q_ASSERT(ok);
 }
 
-void CircularTimer::onWidthChanged(float width)
+void CircularTimer::onDimensionChanged(float dimension)
 {
-    m_width = width;
-    onSizeChanged();
-}
-
-void CircularTimer::onHeightChanged(float height)
-{
-    m_height = height;
-    onSizeChanged();
-}
-
-void CircularTimer::onSizeChanged()
-{
-    m_rootContainer->setPreferredSize(m_width, m_height);
-    m_secondDial->setPreferredSize(m_width * 0.85, m_height * 0.85);
-    m_secondHandle->setPreferredSize(m_width * 0.2, m_height * 0.2);
-    m_secondHandleContainer->setPreferredSize(m_width, m_height * 0.2);
-    m_secondHandleContainer->setTranslationY((m_height - 0.2 * m_height) / 2);
+    m_rootContainer->setPreferredSize(m_dimension, m_dimension);
+    m_secondDial->setPreferredSize(m_dimension * 0.85, m_dimension * 0.85);
+    m_secondHandle->setPreferredSize(m_dimension * 0.2, m_dimension * 0.2);
+    m_secondHandleContainer->setPreferredSize(m_dimension, m_dimension * 0.2);
+    m_secondHandleContainer->setTranslationY((m_dimension - 0.2 * m_dimension) / 2);
     m_secondHandleContainer->setRotationZ(INITIAL_ANGLE);
 
-    float width = m_width * 0.70;
-    float height = m_height * 0.70;
-    m_minuteHandContainer->setPreferredSize(width, height);
-    m_minuteDial->setPreferredSize(width * 0.85, height * 0.85);
-    m_minuteHandle->setPreferredSize(width * 0.2, height * 0.2);
-    m_minuteHandleContainer->setPreferredSize(width, height * 0.2);
-    m_minuteHandleContainer->setTranslationY((height - 0.2 * height) / 2);
+    float secondDialDimension = m_dimension * 0.70;
+    m_minuteHandContainer->setPreferredSize(secondDialDimension, secondDialDimension);
+    m_minuteDial->setPreferredSize(secondDialDimension * 0.85, secondDialDimension * 0.85);
+    m_minuteHandle->setPreferredSize(secondDialDimension * 0.2, secondDialDimension * 0.2);
+    m_minuteHandleContainer->setPreferredSize(secondDialDimension, secondDialDimension * 0.2);
+    m_minuteHandleContainer->setTranslationY((secondDialDimension - 0.2 * secondDialDimension) / 2);
     m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
+
+//    m_rootContainer->setPreferredSize(m_width, m_height);
+//    m_secondDial->setPreferredSize(m_width * 0.85, m_height * 0.85);
+//    m_secondHandle->setPreferredSize(m_width * 0.2, m_height * 0.2);
+//    m_secondHandleContainer->setPreferredSize(m_width, m_height * 0.2);
+//    m_secondHandleContainer->setTranslationY((m_height - 0.2 * m_height) / 2);
+//    m_secondHandleContainer->setRotationZ(INITIAL_ANGLE);
+//
+//    float width = m_width * 0.70;
+//    float height = m_height * 0.70;
+//    m_minuteHandContainer->setPreferredSize(width, height);
+//    m_minuteDial->setPreferredSize(width * 0.85, height * 0.85);
+//    m_minuteHandle->setPreferredSize(width * 0.2, height * 0.2);
+//    m_minuteHandleContainer->setPreferredSize(width, height * 0.2);
+//    m_minuteHandleContainer->setTranslationY((height - 0.2 * height) / 2);
+//    m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
 }
 
 void CircularTimer::updateHands()
@@ -204,4 +210,26 @@ void CircularTimer::resetHandsWithAnimation()
     if (m_minuteHandleContainer->rotationZ() != INITIAL_ANGLE) {
         m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
     }
+}
+
+
+float CircularTimer::dimension() const
+{
+    return m_dimension;
+}
+
+void CircularTimer::setDimension(float dimension)
+{
+    m_dimension = dimension;
+    emit dimensionChanged(m_dimension);
+}
+
+int CircularTimer::digitalTimerSize() const
+{
+    return m_digitalTime->textStyle()->fontSize();
+}
+
+void CircularTimer::setDigitalTimerSize(int size)
+{
+    m_digitalTime->textStyle()->setFontSize(static_cast<FontSize::Type>(size));
 }
