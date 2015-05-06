@@ -3,6 +3,8 @@ import bb.device 1.2
 import bb.multimedia 1.2
 import pomodoro.lib 1.0
 import bb.device 1.4
+import bb.platform 1.0
+
 
 NavigationPane {
     id: rootNavPane
@@ -35,11 +37,16 @@ NavigationPane {
             id: creditsPage
             source: "CreditsPage.qml"
         },
-        MediaPlayer {
-            id: mediaPlayer
+        Invocation {
+            id: contactInvocation
+            query {
+                uri: "mailto:mr.bhoot@vivaldi.net"
+                invokeActionId: "bb.action.SENDEMAIL"
+                invokeTargetId: "sys.pim.uib.email.hybridcomposer"
+            }
         },
-        VibrationController {
-            id: vibrationAlert
+        Notification {
+            id: notification
         },
         QTimer {
             id: activeFrameTimer
@@ -77,6 +84,13 @@ NavigationPane {
                     var page = creditsPage.createObject()
                     Application.menuEnabled = false
                     rootNavPane.push(page)
+                }
+            },
+            ActionItem {
+                title: "Contact Me"
+                imageSource: "asset:///images/contact.png"
+                onTriggered: {
+                    contactInvocation.trigger("bb.action.SENDEMAIL");
                 }
             }
         ]
@@ -166,11 +180,11 @@ NavigationPane {
             stopAction.enabled = true
 
             if (currentTimerType === workTimerType)
-                mediaPlayer.sourceUrl = appSettings.workTimeoutSound;
+                notification.soundUrl = appSettings.workTimeoutSound;
             else if (currentTimerType === shortBreakTimerType)
-                mediaPlayer.sourceUrl = appSettings.shortBreakTimeoutSound;
+                notification.soundUrl = appSettings.shortBreakTimeoutSound;
             else
-                mediaPlayer.sourceUrl = appSettings.longBreakTimeoutSound
+                notification.soundUrl = appSettings.longBreakTimeoutSound;
         }
 
         function onTimerStopped() {
@@ -184,7 +198,7 @@ NavigationPane {
             startAction.enabled = true
             stopAction.enabled = false
 
-            mediaPlayer.play()
+            notification.notify()
 
             if (currentTimerType == workTimerType) {
                 pomodoroCountBeforeLongBreak += 1
@@ -210,9 +224,6 @@ NavigationPane {
                 currentTimerType = workTimerType
                 timer.duration = appSettings.pomodoroDuration
             }
-
-            if (vibrationAlert.isSupported())
-                vibrationAlert.start(100, 2400)
         }
 
         onCreationCompleted: {
@@ -226,6 +237,7 @@ NavigationPane {
         Application.menuEnabled = true
 
         if (currentTimerType === workTimerType) {
+            console.log(appSettings.pomodoroDuration)
             timer.duration = appSettings.pomodoroDuration
         } else if (currentTimerType === shortBreakTimerType) {
             timer.duration = appSettings.shortBreakDuration

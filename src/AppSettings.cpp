@@ -23,9 +23,9 @@ AppSettings::AppSettings(QObject *parent) : QObject(parent)
     mShortBreakDuration = QSettings().value(SHORT_BREAK_DURATION, 5).toInt();
     mLongBreakDuration = QSettings().value(LONG_BREAK_DURATION, 15).toInt();
     mPomodorosBeforeLongBreak = QSettings().value(POMODOROS_BEFORE_LONG_BREAK, 4).toInt();
-    mWorkTimeoutSound = QSettings().value(WORK_TIMEOUT_SOUND, "asset:///sounds/alien-alarm.mp3").toString();
-    mShortBreakTimeoutSound = QSettings().value(SHORT_BREAK_TIMEOUT_SOUND, "asset:///sounds/glass-ping.mp3").toString();
-    mLongBreakTimeoutSound = QSettings().value(LONG_BREAK_TIMEOUT_SOUND, "asset:///sounds/glass-ping.mp3").toString();
+    mWorkTimeoutSound = QSettings().value(WORK_TIMEOUT_SOUND, "asset:///sounds/ship-bell.mp3").toString();
+    mShortBreakTimeoutSound = QSettings().value(SHORT_BREAK_TIMEOUT_SOUND, "asset:///sounds/temple-bell.mp3").toString();
+    mLongBreakTimeoutSound = QSettings().value(LONG_BREAK_TIMEOUT_SOUND, "asset:///sounds/zen-temple-bell.mp3").toString();
 }
 
 AppSettings::~AppSettings()

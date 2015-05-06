@@ -65,7 +65,6 @@ CircularTimer::CircularTimer(Container *parent) :
     ok = QObject::connect(this, SIGNAL(durationChanged(int)), this, SLOT(onDurationChanged(int)));
     Q_ASSERT(ok);
 
-//        m_digitalTime->textStyle()->setFontSize(FontSize::XXLarge);
     setDimension(m_dimension);
     setDuration(mDuration);
 
@@ -89,22 +88,6 @@ void CircularTimer::onDimensionChanged(float dimension)
     m_minuteHandleContainer->setPreferredSize(secondDialDimension, secondDialDimension * 0.2);
     m_minuteHandleContainer->setTranslationY((secondDialDimension - 0.2 * secondDialDimension) / 2);
     m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
-
-//    m_rootContainer->setPreferredSize(m_width, m_height);
-//    m_secondDial->setPreferredSize(m_width * 0.85, m_height * 0.85);
-//    m_secondHandle->setPreferredSize(m_width * 0.2, m_height * 0.2);
-//    m_secondHandleContainer->setPreferredSize(m_width, m_height * 0.2);
-//    m_secondHandleContainer->setTranslationY((m_height - 0.2 * m_height) / 2);
-//    m_secondHandleContainer->setRotationZ(INITIAL_ANGLE);
-//
-//    float width = m_width * 0.70;
-//    float height = m_height * 0.70;
-//    m_minuteHandContainer->setPreferredSize(width, height);
-//    m_minuteDial->setPreferredSize(width * 0.85, height * 0.85);
-//    m_minuteHandle->setPreferredSize(width * 0.2, height * 0.2);
-//    m_minuteHandleContainer->setPreferredSize(width, height * 0.2);
-//    m_minuteHandleContainer->setTranslationY((height - 0.2 * height) / 2);
-//    m_minuteHandleContainer->setRotationZ(INITIAL_ANGLE);
 }
 
 void CircularTimer::updateHands()
@@ -166,8 +149,12 @@ void CircularTimer::timeout()
 void CircularTimer::onDurationChanged(int duration)
 {
     m_startTime.setHMS(0, 0, 0);
-    m_endTime.setHMS(0, duration, 0);
-    m_digitalTime->setText(m_endTime.toString("mm.ss"));
+    m_endTime = m_startTime.addSecs(duration * 60);
+    qDebug() << "endTime: " << m_endTime;
+    if (duration < 60)
+        m_digitalTime->setText(m_endTime.toString("mm.ss"));
+    else
+        m_digitalTime->setText("60.00");
     mMinuteHandMovementAngle = 360 / (double) duration;
 }
 
@@ -180,7 +167,10 @@ QString CircularTimer::timeLeft() const
         QTime timeLeft = QTime(0, 0, 0).addSecs(secondsLeft);
         return timeLeft.toString("mm.ss");
     }
-    return m_endTime.toString("mm.ss");
+    if (m_endTime.hour() <= 0)
+        return m_endTime.toString("mm.ss");
+    else
+        return "60.00";
 }
 
 bool CircularTimer::isActive() const
