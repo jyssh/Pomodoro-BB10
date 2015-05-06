@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include <QSettings>
 #include <QDebug>
+#include <QDir>
 
 
 const QString AppSettings::POMODORO_DURATION("pomodoroDuration");
@@ -23,9 +24,13 @@ AppSettings::AppSettings(QObject *parent) : QObject(parent)
     mShortBreakDuration = QSettings().value(SHORT_BREAK_DURATION, 5).toInt();
     mLongBreakDuration = QSettings().value(LONG_BREAK_DURATION, 15).toInt();
     mPomodorosBeforeLongBreak = QSettings().value(POMODOROS_BEFORE_LONG_BREAK, 4).toInt();
-    mWorkTimeoutSound = QSettings().value(WORK_TIMEOUT_SOUND, "asset:///sounds/ship-bell.mp3").toString();
-    mShortBreakTimeoutSound = QSettings().value(SHORT_BREAK_TIMEOUT_SOUND, "asset:///sounds/temple-bell.mp3").toString();
-    mLongBreakTimeoutSound = QSettings().value(LONG_BREAK_TIMEOUT_SOUND, "asset:///sounds/zen-temple-bell.mp3").toString();
+
+    const QString workingDir = QDir::currentPath();
+    const QString publicDir = QString::fromLatin1("file://%1/app/public/").arg(workingDir);
+
+    mWorkTimeoutSound = QSettings().value(WORK_TIMEOUT_SOUND, publicDir + "sounds/ship-bell.mp3").toString();
+    mShortBreakTimeoutSound = QSettings().value(SHORT_BREAK_TIMEOUT_SOUND, publicDir + "sounds/temple-bell.mp3").toString();
+    mLongBreakTimeoutSound = QSettings().value(LONG_BREAK_TIMEOUT_SOUND, publicDir + "sounds/zen-temple-bell.mp3").toString();
 }
 
 AppSettings::~AppSettings()
